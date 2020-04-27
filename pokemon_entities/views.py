@@ -26,7 +26,7 @@ def show_all_pokemons(request):
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon in pokemons:
-        for pokemon_entity in PokemonEntity.objects.filter(pokemon=pokemon):
+        for pokemon_entity in pokemon.entities:
             add_pokemon(
                 folium_map, pokemon_entity.lat, pokemon_entity.lon,
                 pokemon.title_ru, request.build_absolute_uri(pokemon.photo.url))
@@ -77,10 +77,8 @@ def show_pokemon(request, pokemon_id):
             "img_url": request.build_absolute_uri(next_evolution.photo.url)
         }
 
-    pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon)
-
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    for pokemon_entity in pokemon_entities:
+    for pokemon_entity in requested_pokemon.entities:
         add_pokemon(
             folium_map, pokemon_entity.lat, pokemon_entity.lon,
             pokemon_info['title_ru'], pokemon_info['img_url'])
